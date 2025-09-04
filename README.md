@@ -58,7 +58,7 @@ const text = match(
 
 ### Coalescing defaults
 
-Prefer explicit fallbacks over `||` for values like 0 or empty strings.
+A collection of Maybe can be matched and have `none` filtered out using `coalesce` 
 
 ```ts
 const a = some(0);
@@ -66,6 +66,15 @@ const b = none;
 const c = some(3);
 
 const values = coalesce(a, b, c); // [0, 3]
+```
+or 
+```ts
+const a = some(0);
+const b = none;
+const c = some(3);
+const maybes = [a, b, c];
+
+const values = coalesce(...maybes); // [0, 3]
 ```
 
 ### When to use Maybe
