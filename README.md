@@ -58,7 +58,7 @@ const text = match(
 
 ### Coalescing defaults
 
-A collection of Maybe can be matched and have `none` filtered out using `coalesce` 
+Use `coalesce` on multiple Maybe to filter and remove instances of `none` and extract values wrapped by `some`  
 
 ```ts
 const a = some(0);
