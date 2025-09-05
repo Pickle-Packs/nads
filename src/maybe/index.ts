@@ -23,40 +23,45 @@ export function coalesce(...maybes: Readonly<Array<Maybe<unknown>>>): Array<unkn
 }
 
 export function flatMap<T, TNext>(
-    maybe: Maybe<T>,
+    maybeInstance: Maybe<T>,
     mapper: (inner: T) => Maybe<TNext>,
 ): Maybe<TNext> {
-    return isSome(maybe)
-        ? mapper(maybe[valueSymbol] as T)
-        : maybe as Maybe<TNext>;
+    return isSome(maybeInstance)
+        ? mapper(maybeInstance[valueSymbol] as T)
+        : maybeInstance as Maybe<TNext>;
 }
 
 export function map<T, TNext>(
-    maybe: Maybe<T>,
+    maybeInstance: Maybe<T>,
     mapper: (inner: T) => TNext,
 ): Maybe<TNext> {
-    return isSome(maybe)
-        ? some(mapper(maybe[valueSymbol] as T))
-        : maybe as Maybe<TNext>;
+    return isSome(maybeInstance)
+        ? some(mapper(maybeInstance[valueSymbol] as T))
+        : maybeInstance as Maybe<TNext>;
 }
 
 export function match<T, TNext>(
-    maybe: Maybe<T>,
+    maybeInstance: Maybe<T>,
     onSome: (successValue: T) => TNext,
     onNone: (() => TNext) | TNext,
 ): TNext {
-    return isSome(maybe)
-        ? onSome(maybe[valueSymbol] as T)
+    return isSome(maybeInstance)
+        ? onSome(maybeInstance[valueSymbol] as T)
         : resolveOnNone(onNone);
 }
 
-export function some<T>(value?: T): Maybe<T> {
-    return (undefined !== value && null !== value)
+export function maybe<T>(maybeValue?: T): Maybe<T> {
+    return (undefined !== maybeValue && null !== maybeValue)
         ? {
             [kindSymbol]: maybeKind.some,
-            [valueSymbol]: value,
+            [valueSymbol]: maybeValue,
         }
         : none;
+}
+
+// eslint-disable-next-line @functional/prefer-tacit
+export function some<T>(value: T): Maybe<T> {
+    return maybe(value);
 }
 
 function appendIfSome<T>(
@@ -65,10 +70,10 @@ function appendIfSome<T>(
 ): Array<T>;
 function appendIfSome(
     array: Array<unknown>,
-    maybe: Maybe<unknown>,
+    maybeInstance: Maybe<unknown>,
 ): Array<unknown> {
     return match(
-        maybe,
+        maybeInstance,
         x => [
             ...array,
             x,
@@ -77,8 +82,8 @@ function appendIfSome(
     );
 }
 
-function isSome<T>(maybe: Maybe<T>): boolean {
-    return maybe[kindSymbol] === maybeKind.some;
+function isSome<T>(maybeInstance: Maybe<T>): boolean {
+    return maybeInstance[kindSymbol] === maybeKind.some;
 }
 
 function resolveOnNone<T>(onNone: (() => T) | T): T {

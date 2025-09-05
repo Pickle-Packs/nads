@@ -1,6 +1,6 @@
 ﻿import { describe, expect, it } from 'vitest';
 // @ts-ignore
-import { coalesce, flatMap, none, some, map, match } from '../src/maybe';
+import { coalesce, flatMap, none, some, map, match, maybe } from '../src/maybe';
 
 describe('maybe', () => {
     describe('coalesce', () => {
@@ -25,10 +25,10 @@ describe('maybe', () => {
         describe('when some', () => {
             it('should map', () => {
                 const value = 1;
-                const maybe = some(value);
+                const maybeValue = some(value);
                 let isMapped = false;
 
-                flatMap(maybe, (x: number) => {
+                flatMap(maybeValue, (x: number) => {
                     isMapped = true;
                     return some(doubleIt(x));
                 });
@@ -42,10 +42,10 @@ describe('maybe', () => {
         });
         describe('when none', () => {
             it('should not map', () => {
-                const maybe = none;
+                const maybeValue = none;
                 let isMapped = false;
 
-                flatMap(maybe, (x: number) => {
+                flatMap(maybeValue, (x: number) => {
                     isMapped = true;
                     return some(doubleIt(x));
                 });
@@ -63,10 +63,10 @@ describe('maybe', () => {
         describe('when some', () => {
             it('should map', () => {
                 const value = 1;
-                const maybe = some(value);
+                const maybeValue = some(value);
                 let isMapped = false;
 
-                map(maybe, (x: number) => {
+                map(maybeValue, (x: number) => {
                     isMapped = true;
                     return doubleIt(x);
                 });
@@ -80,10 +80,10 @@ describe('maybe', () => {
         });
         describe('when none', () => {
             it('should not map', () => {
-                const maybe = none;
+                const maybeValue = none;
                 let isMapped = false;
 
-                map(maybe, (x: number) => {
+                map(maybeValue, (x: number) => {
                     isMapped = true;
                     return doubleIt(x);
                 });
@@ -102,10 +102,10 @@ describe('maybe', () => {
             it('should evaluate onSome', () => {
                 const value = 1;
                 const noValue = -1;
-                const maybe = some(value);
+                const maybeValue = some(value);
 
                 const matched: number = match(
-                    maybe,
+                    maybeValue,
                     (x: number) => x,
                     noValue,
                 );
@@ -145,18 +145,38 @@ describe('maybe', () => {
     describe('some', () => {
        describe('when null value is provided', () => {
            it('should return none', () => {
-                const maybe = some<string>(null);
+                const maybeValue = some<string>(null);
 
-                const isNone = match(maybe, () => false, true);
+                const isNone = match(maybeValue, () => false, true);
 
                 expect(isNone).toBe(true);
            });
        });
         describe('when undefined value is provided', () => {
             it('should return none', () => {
-                const maybe = some<string>(undefined);
+                const maybeValue = some<string>(undefined);
 
-                const isNone = match(maybe, () => false, true);
+                const isNone = match(maybeValue, () => false, true);
+
+                expect(isNone).toBe(true);
+            });
+        });
+    });
+    describe('maybe', () => {
+        describe('when null value is provided', () => {
+            it('should return none', () => {
+                const maybeValue = maybe<string>(null);
+
+                const isNone = match(maybeValue, () => false, true);
+
+                expect(isNone).toBe(true);
+            });
+        });
+        describe('when undefined value is provided', () => {
+            it('should return none', () => {
+                const maybeValue = maybe<string>(undefined);
+
+                const isNone = match(maybeValue, () => false, true);
 
                 expect(isNone).toBe(true);
             });
