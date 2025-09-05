@@ -142,4 +142,24 @@ describe('maybe', () => {
             });
         });
     });
+    describe('some', () => {
+       describe('when null value is provided', () => {
+           it('should return none', () => {
+                const maybe = some<string>(null);
+
+                const isNone = match(maybe, () => false, true);
+
+                expect(isNone).toBe(true);
+           });
+       });
+        describe('when undefined value is provided', () => {
+            it('should return none', () => {
+                const maybe = some<string>(undefined);
+
+                const isNone = match(maybe, () => false, true);
+
+                expect(isNone).toBe(true);
+            });
+        });
+    });
 });
