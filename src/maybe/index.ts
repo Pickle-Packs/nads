@@ -50,11 +50,13 @@ export function match<T, TNext>(
         : resolveOnNone(onNone);
 }
 
-export function some<T>(value: T): Maybe<T> {
-    return {
-        [kindSymbol]: maybeKind.some,
-        [valueSymbol]: value,
-    };
+export function some<T>(value?: T): Maybe<T> {
+    return (undefined !== value && null !== value)
+        ? {
+            [kindSymbol]: maybeKind.some,
+            [valueSymbol]: value,
+        }
+        : none;
 }
 
 function appendIfSome<T>(
