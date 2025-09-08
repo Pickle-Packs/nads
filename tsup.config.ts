@@ -1,16 +1,18 @@
 import { defineConfig } from 'tsup';
 
 export default defineConfig({
-    entry: ['src/maybe/index.ts', 'src/outcome/index.ts'], // add more entries if you export multiple modules
-    format: ['esm'], // Node 24 uses ESM here
-    target: 'node24', // modern Node features
-    dts: true, // emit .d.ts via tsup
+    entry: ['src/maybe/index.ts', 'src/outcome/index.ts'],
+    format: ['esm', 'cjs'],
+    outDir: 'dist',
+    outExtension: ({ format }) => (format === 'cjs' ? { js: '.cjs' } : { js: '.mjs' }),
+    target: 'node24',
+    dts: true,
     sourcemap: true,
     clean: true,
-    minify: true, // safe for server libs
-    treeshake: true, // enable esbuild’s tree shaking
-    splitting: false, // single file output for libraries
+    minify: true,
+    treeshake: true,
+    splitting: false,
     platform: 'node',
-    skipNodeModulesBundle: true, // keep deps external
-    external: [], // add peer deps here if any
+    skipNodeModulesBundle: true,
+    external: [],
 });
