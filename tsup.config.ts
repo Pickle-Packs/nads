@@ -5,7 +5,7 @@ export default defineConfig({
     format: ['esm', 'cjs'],
     outDir: 'dist',
     outExtension: ({ format }) => (format === 'cjs' ? { js: '.cjs' } : { js: '.mjs' }),
-    target: 'node24',
+    target: 'node20',
     dts: true,
     sourcemap: true,
     clean: true,
